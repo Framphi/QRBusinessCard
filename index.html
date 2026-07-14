@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visitenkarten-Generator mit QR-Code</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Visitenkarten-Generator</h1>
+    <p>Erstellen Sie professionelle Visitenkarten mit integriertem QR-Code in wenigen Schritten.</p>
+  </header>
+
+  <main>
+    <section class="panel preview-panel">
+      <h2>Kartenvorschau</h2>
+      
+      <div class="design-controls">
+        <div class="template-selection">
+          <label><input type="radio" name="template" value="template1" checked> <span>Diplomat</span></label>
+          <label><input type="radio" name="template" value="template2"> <span>Canvas</span></label>
+        </div>
+        <div class="actions">
+          <button id="download-pdf" type="button" class="btn-primary">📥 PDF herunterladen</button>
+          <button id="download-vcard" type="button" class="btn-secondary">📇 vCard exportieren</button>
+        </div>
+      </div>
+
+      <div class="preview-grid">
+        <!-- DESIGN A: SERIÖS (85mm × 55mm Container) -->
+        <article class="card-container template1" id="card-front" style="display: grid;">
+          <div class="card-a">
+            <!-- TOP LEFT: Name + Position -->
+            <div class="section-top-left-a">
+              <div class="name-a" id="preview-name-a">[Vorname Nachname]</div>
+              <div class="position-a" id="preview-position-a">[Position/Titel]</div>
+            </div>
+            
+            <!-- TOP RIGHT: QR Code (20mm × 20mm) -->
+            <div class="section-top-right-a">
+              <img id="qr-code-a" alt="QR Code" class="qr-a">
+            </div>
+            
+            <!-- BOTTOM LEFT: Firma + Adresse (3 Zeilen) -->
+            <div class="section-bottom-left-a">
+              <div class="company-a" id="preview-company-a">[Firmenname]</div>
+              <div class="address-line-1-a" id="preview-street-a">[Straße Hausnummer]</div>
+              <div class="address-line-2-a" id="preview-city-a">[PLZ] [Stadt]</div>
+              <div class="address-line-3-a" id="preview-country-a">[Land]</div>
+            </div>
+            
+            <!-- BOTTOM RIGHT: Kontakte (Text only) -->
+            <div class="section-bottom-right-a">
+              <div class="contact-line-a">
+                <span class="contact-text-a" id="preview-phone-a">[Telefonnummer]</span>
+              </div>
+              <div class="contact-line-a">
+                <span class="contact-text-a" id="preview-email-a">[E-Mail-Adresse]</span>
+              </div>
+              <div class="contact-line-a">
+                <span class="contact-text-a" id="preview-website-a">[Website]</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- DESIGN B: VERSPIELT (85mm × 55mm Container) -->
+        <article class="card-container template2" id="card-front-b" style="display: none;">
+          <div class="card-b">
+            <!-- LEFT SIDE: QR Code + Info -->
+            <div class="section-left-b">
+              <img id="qr-code-b" alt="QR Code" class="qr-b">
+              <div class="info-b">
+                <div class="name-b" id="preview-name-b">[Vorname Nachname]</div>
+                <div class="company-b" id="preview-company-b">[Firmenname]</div>
+                <div class="title-b" id="preview-title-b">[Position/Titel]</div>
+              </div>
+            </div>
+            
+            <!-- DIVIDER LINE: Vertical separator in the middle -->
+            <div class="divider-b"></div>
+            
+            <!-- RIGHT SIDE: Icons (3 items: Telefon, E-Mail, Website) -->
+            <div class="section-right-b">
+              <div class="icons-list-b">
+                <div class="icon-item-b">
+                  <div class="icon-b">☎</div>
+                  <span class="icon-label-b" id="preview-phone-b">[Telefonnummer]</span>
+                </div>
+                <div class="icon-item-b">
+                  <div class="icon-b">✉</div>
+                  <span class="icon-label-b" id="preview-email-b">[E-Mail-Adresse]</span>
+                </div>
+                <div class="icon-item-b">
+                  <div class="icon-b">🌐</div>
+                  <span class="icon-label-b" id="preview-website-b">[Website]</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel form-panel">
+      <h2>Ihre Kontaktdaten</h2>
+      <p class="form-hint">Geben Sie Ihre Daten ein, um eine Vorschau Ihrer Visitenkarte zu sehen und diese als PDF zu exportieren.</p>
+      <form id="contact-form">
+        <div class="form-group">
+          <label for="firstName">Vorname <span class="required">*</span></label>
+          <input type="text" id="firstName" placeholder="z.B. Max" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Nachname <span class="required">*</span></label>
+          <input type="text" id="lastName" placeholder="z.B. Mustermann" required>
+        </div>
+        <div class="form-group">
+          <label for="company">Unternehmen</label>
+          <input type="text" id="company" placeholder="z.B. Beispiel GmbH">
+        </div>
+        <div class="form-group">
+          <label for="jobTitle">Funktion / Position</label>
+          <input type="text" id="jobTitle" placeholder="z.B. Vertriebsleiter">
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input type="tel" id="phone" placeholder="z.B. +49 170 1234567">
+        </div>
+        <div class="form-group">
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" placeholder="z.B. max@beispiel.de">
+        </div>
+        <div class="form-group">
+          <label for="website">Website</label>
+          <input type="url" id="website" placeholder="z.B. https://example.de">
+        </div>
+        <fieldset class="address-fieldset">
+          <legend>Adresse</legend>
+          <div class="form-group">
+            <label for="street">Straße und Hausnummer</label>
+            <input type="text" id="street" placeholder="z.B. Musterstraße 1">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postalCode">Postleitzahl</label>
+              <input type="text" id="postalCode" placeholder="z.B. 12345">
+            </div>
+            <div class="form-group">
+              <label for="city">Stadt</label>
+              <input type="text" id="city" placeholder="z.B. Musterstadt">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="country">Land</label>
+            <input type="text" id="country" placeholder="z.B. Deutschland">
+          </div>
+        </fieldset>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 Visitenkarten-Generator. Alle Rechte vorbehalten.</p>
+      <p class="privacy-info"><strong>Datenschutz:</strong> Alle Daten werden ausschließlich lokal in Ihrem Browser verarbeitet. Es werden keine Daten an Server übertragen oder gespeichert.</p>
+      <div class="footer-links">
+        <a href="impressum.html" target="_blank">Impressum</a>
+        <span class="separator">|</span>
+        <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>
+        <span class="separator">|</span>
+        <a href="agb.html" target="_blank">AGB</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
